@@ -4,12 +4,15 @@ import './App.css'
 function App() {
   const [newsData, setNewsData] = useState([])
   const [category, setCategory] = useState("general")
+  const [loading, setLoading] = useState(false)
 
   async function fetchData() {
+    setLoading(true)
     let URL = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=0ec2d710049643a5b5a889c81cfd5ef6`;
     let response = await fetch(URL)
     let data = await response.json()
     setNewsData(data.articles)
+    setLoading(false)
     console.log(data)
 
   }
@@ -50,7 +53,7 @@ function App() {
       <div className="container">
         <h3 className='title-news'>Latest News : <span>{category.toUpperCase()}</span></h3>
         <div className="news-container">
-          {newsData.map((news) => {
+          {loading ? "Loading..." : newsData.map((news) => {
             return news.title.length > 13 && <div className="news-card">
               <div className="img">
                 <img src={news.urlToImage ? news.urlToImage : "./src/assets/default.png"} width="250" alt="" />
